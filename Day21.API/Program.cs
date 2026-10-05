@@ -10,20 +10,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<Day21DBContext>(
-    options =>
-        options.UseSqlServer(
-            builder.Configuration
-                .GetConnectionString(
-                    "DefaultConnection")));
+// service registration
 
-builder.Services.AddScoped<
-    IEmployeeRepository,
-    EmployeeRepository>();
+builder.Services.AddDbContext<Day21DBContext>(options => options.UseSqlServer( builder.Configuration .GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<
-    IEmployeeService,
-    EmployeeService>();
+builder.Services.AddScoped<IEmployeeRepository,EmployeeRepository>();
+
+builder.Services.AddScoped<IEmployeeService,EmployeeService>();
 
 var app = builder.Build();
 
@@ -35,6 +28,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Configure the app to serve static files from the "wwwroot" folder
 
 app.UseStaticFiles();
 
