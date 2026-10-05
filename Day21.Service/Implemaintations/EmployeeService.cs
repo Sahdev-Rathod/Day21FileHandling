@@ -15,9 +15,7 @@ namespace Day21.Service
         private readonly IEmployeeRepository _repository;
         private readonly IWebHostEnvironment _environment;
 
-        public EmployeeService(
-            IEmployeeRepository repository,
-            IWebHostEnvironment environment)
+        public EmployeeService( IEmployeeRepository repository, IWebHostEnvironment environment)
         {
             _repository = repository;
             _environment = environment;
@@ -25,8 +23,7 @@ namespace Day21.Service
 
         public async Task<List<EmployeeDto>> GetAllAsync()
         {
-            var employees =
-                await _repository.GetAllAsync();
+            var employees =  await _repository.GetAllAsync();
 
             return employees.Select(x => new EmployeeDto
             {
@@ -41,8 +38,7 @@ namespace Day21.Service
 
         public async Task<EmployeeDto?> GetByIdAsync(int id)
         {
-            var employee =
-                await _repository.GetByIdAsync(id);
+            var employee =  await _repository.GetByIdAsync(id);
 
             if (employee == null)
                 return null;
@@ -68,8 +64,7 @@ namespace Day21.Service
                 Salary = dto.Salary
             };
 
-            var result =
-                await _repository.AddAsync(employee);
+            var result = await _repository.AddAsync(employee);
 
             dto.Id = result.Id;
 
@@ -78,8 +73,7 @@ namespace Day21.Service
 
         public async Task<bool> UploadImageAsync( int employeeId, IFormFile file)
         {
-            var employee =
-                await _repository.GetByIdAsync(employeeId);
+            var employee =  await _repository.GetByIdAsync(employeeId);
 
             if (employee == null)
                 return false;
@@ -91,8 +85,7 @@ namespace Day21.Service
                 Path.GetExtension(file.FileName)
                 .ToLowerInvariant();
 
-            var allowedExtensions =
-                new[] { ".jpg", ".jpeg", ".png" };
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
 
             if (!allowedExtensions.Contains(extension))
                 return false;
@@ -100,18 +93,14 @@ namespace Day21.Service
             if (file.Length > 5 * 1024 * 1024)
                 return false;
 
-            var uploadFolder =
-                Path.Combine(
-                    _environment.WebRootPath,
-                    "uploads");
+            var uploadFolder = Path.Combine( _environment.WebRootPath, "uploads");
 
             if (!Directory.Exists(uploadFolder))
             {
                 Directory.CreateDirectory(uploadFolder);
             }
 
-            var fileName =
-                $"{Guid.NewGuid()}{extension}";
+            var fileName = $"{Guid.NewGuid()}{extension}";
 
             var filePath =
                 Path.Combine(

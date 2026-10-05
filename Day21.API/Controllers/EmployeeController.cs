@@ -19,40 +19,55 @@ namespace Day21.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var result =
-                await _service.GetAllAsync();
+            var result =  await _service.GetAllAsync();
 
             return Ok(result);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(
-            int id)
+        public async Task<IActionResult> GetById( int id)
         {
-            var result =
-                await _service.GetByIdAsync(id);
+            try
+            {
+                var result = await _service.GetByIdAsync(id);
 
-            if (result == null)
-                return NotFound(
-                    "Employee not found.");
+                if (result == null)
+                    return NotFound(
+                        "Employee not found.");
 
-            return Ok(result);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode( 500, $"Internal server error: {ex.Message}");
+            }
+
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(
-            EmployeeDto dto)
+        public async Task<IActionResult> Add( EmployeeDto dto)
         {
-            var result =
-                await _service.AddAsync(dto);
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await _service.AddAsync(dto);
 
-            return Ok(result);
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest("Employee is null");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpPost("{id}/upload-image")]
-        public async Task<IActionResult> UploadImage(
-            int id,
-            IFormFile file)
+        public async Task<IActionResult> UploadImage( int id, IFormFile file)
         {
             var result =
                 await _service.UploadImageAsync(
@@ -68,8 +83,7 @@ namespace Day21.API.Controllers
         }
 
         [HttpGet("{id}/image")]
-        public async Task<IActionResult> DownloadImage(
-            int id)
+        public async Task<IActionResult> DownloadImage(int id)
         {
             var result =
                 await _service

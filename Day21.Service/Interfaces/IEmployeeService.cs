@@ -11,14 +11,9 @@ namespace Day21.Service
 
         Task<EmployeeDto> AddAsync(EmployeeDto dto);
 
-        Task<bool> UploadImageAsync(
-            int employeeId,
-            IFormFile file);
+        Task<bool> UploadImageAsync(int employeeId, IFormFile file);
 
-        Task<(byte[] Data,
-            string ContentType,
-            string FileName)?>
-            DownloadImageAsync(int employeeId);
+        Task<(byte[] Data,string ContentType, string FileName)?> DownloadImageAsync(int employeeId);
 
         Task<byte[]> GeneratePdfAsync();
 
